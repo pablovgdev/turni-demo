@@ -11,6 +11,7 @@ export default function CalculateButton() {
 		setNurse2Calendar,
 		nurse3Calendar,
 		setNurse3Calendar,
+		nursesOwedDays,
 		setNursesOwedDays
 	} = useContext(Context)
 
@@ -59,10 +60,23 @@ export default function CalculateButton() {
 		setNurse2Calendar([...nurse2Calendar].map((day) => ({ ...day })))
 		setNurse3Calendar([...nurse3Calendar].map((day) => ({ ...day })))
 
+		const nurse1NewWorkDays = nurse1Calendar.filter((day) => day.work).length
+		const nurse2NewWorkDays = nurse2Calendar.filter((day) => day.work).length
+		const nurse3NewWorkDays = nurse3Calendar.filter((day) => day.work).length
+
 		const owedDays = {
-			nurse1: nurse1WorkDays - nurse1Calendar.filter((day) => day.work).length,
-			nurse2: nurse2WorkDays - nurse2Calendar.filter((day) => day.work).length,
-			nurse3: nurse3WorkDays - nurse3Calendar.filter((day) => day.work).length
+			nurse1:
+				nurse1WorkDays !== nurse1NewWorkDays
+					? nurse1WorkDays - nurse1NewWorkDays
+					: nursesOwedDays.nurse1,
+			nurse2:
+				nurse2WorkDays !== nurse2NewWorkDays
+					? nurse2WorkDays - nurse2NewWorkDays
+					: nursesOwedDays.nurse2,
+			nurse3:
+				nurse3WorkDays !== nurse3NewWorkDays
+					? nurse3WorkDays - nurse3NewWorkDays
+					: nursesOwedDays.nurse3
 		}
 
 		setNursesOwedDays(owedDays)
